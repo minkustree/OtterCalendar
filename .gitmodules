@@ -1,3 +1,6 @@
 [submodule "external/datetimepicker"]
 	path = external/datetimepicker
 	url = https://android.googlesource.com/platform/frameworks/opt/datetimepicker
+[submodule "external/chips"]
+	path = external/chips
+	url = https://android.googlesource.com/platform/frameworks/opt/chips
