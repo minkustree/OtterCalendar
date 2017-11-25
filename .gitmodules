@@ -4,3 +4,15 @@
 [submodule "external/chips"]
 	path = external/chips
 	url = https://android.googlesource.com/platform/frameworks/opt/chips
+[submodule "external/platforms-frameworks-ex"]
+	path = external/platforms-frameworks-ex
+	url = https://android.googlesource.com/platform/frameworks/ex
+[submodule "external/colorpicker"]
+	path = external/colorpicker
+	url = https://android.googlesource.com/platform/frameworks/opt/colorpicker
+[submodule "external/calendar"]
+	path = external/calendar
+	url = https://android.googlesource.com/platform/frameworks/opt/calendar/
+[submodule "external/timezonepicker"]
+	path = external/timezonepicker
+	url = https://android.googlesource.com/platform/frameworks/opt/timezonepicker

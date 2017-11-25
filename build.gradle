@@ -1,0 +1,229 @@
+/**
+ * The buildscript block is where you configure the repositories and
+ * dependencies for Gradle itself—meaning, you should not include dependencies
+ * for your modules here. For example, this block includes the Android plugin for
+ * Gradle as a dependency because it provides the additional instructions Gradle
+ * needs to build Android app modules.
+ */
+
+buildscript {
+
+    /**
+     * The repositories block configures the repositories Gradle uses to
+     * search or download the dependencies. Gradle pre-configures support for remote
+     * repositories such as JCenter, Maven Central, and Ivy. You can also use local
+     * repositories or define your own remote repositories. The code below defines
+     * JCenter as the repository Gradle should use to look for its dependencies.
+     *
+     * New projects created using Android Studio 3.0 and higher also include
+     * Google's Maven repository.
+     */
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    /**
+     * The dependencies block configures the dependencies Gradle needs to use
+     * to build your project. The following line adds Android plugin for Gradle
+     * version 3.0.0 as a classpath dependency.
+     */
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+    }
+}
+
+/**
+ * The allprojects block is where you configure the repositories and
+ * dependencies used by all modules in your project, such as third-party plugins
+ * or libraries. However, you should configure module-specific dependencies in
+ * each module-level build.gradle file. For new projects, Android Studio
+ * includes JCenter and Google's Maven repository by default, but it does not
+ * configure any dependencies (unless you select a template that requires some).
+ */
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+project(':external:chips') {
+    apply plugin: 'android-library'
+
+    android {
+        compileSdkVersion 26
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                resources.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+            }
+        }
+    }
+}
+
+project(':external:platforms-frameworks-ex:common') {
+    apply plugin: 'android-library'
+
+    android {
+        compileSdkVersion 26
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['java']
+                resources.srcDirs = ['java']
+                aidl.srcDirs = ['java']
+                renderscript.srcDirs = ['java']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+            }
+        }
+    }
+}
+
+project(':external:colorpicker') {
+    apply plugin: 'android-library'
+    android { compileSdkVersion 26 }
+}
+
+project(':external:calendar') {
+    apply plugin: 'android-library'
+    android {
+        compileSdkVersion 26
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+            }
+        }
+
+        lintOptions {
+            // Ignore lint errors in AOSP code
+            abortOnError false
+        }
+
+    }
+}
+
+project (':external:datetimepicker') {
+    apply plugin: 'android-library'
+    android {
+        compileSdkVersion 26
+
+        dependencies {
+            compile findDependency(':support-v4', 'com.android.support:support-v4:23.3.+')
+        }
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                resources.srcDirs = ['src']
+                res.srcDirs = ['res']
+            }
+        }
+    }
+}
+
+project (':external:timezonepicker') {
+    apply plugin: 'android-library'
+    android {
+        compileSdkVersion 26
+
+        dependencies {
+            compile findDependency(':support-v4', 'com.android.support:support-v4:23.3.+')
+        }
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                resources.srcDirs = ['src']
+                res.srcDirs = ['res']
+            }
+        }
+    }
+}
+
+/**
+ * This line applies the com.android.application plugin. Note that you should
+ * only apply the com.android.application plugin. Applying the Java plugin as
+ * well will result in a build error.
+ */
+apply plugin: 'com.android.application'
+
+/**
+ * This dependencies block includes any dependencies for the project itself. The
+ * following line includes all the JAR files in the libs directory.
+ */
+dependencies {
+    compile findDependency(':support-v4', 'com.android.support:support-v4:23.3.+')
+    compile project(':external:chips')
+    compile project(':external:platforms-frameworks-ex:common')
+    compile project(':external:colorpicker')
+    compile project(':external:calendar')
+    compile project(':external:datetimepicker')
+    compile project(':external:timezonepicker')
+
+//    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // Add other library dependencies here (see the next step)
+}
+
+
+/**
+ * The android{} block configures all of the parameters for the Android build.
+ * You must provide a value for at least the compilation target.
+ */
+android {
+    compileSdkVersion 26
+
+    /**
+     * This nested sourceSets block points the source code directories to the
+     * existing folders in the project, instead of using the default new
+     * organization.
+     */
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+
+        /**
+         * Move the build types to build-types/<type>
+         * For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+         * This moves them out of them default location under src/<type>/... which would
+         * conflict with src/ being used by the main source set.
+         * Adding new build types or product flavors should be accompanied
+         * by a similar customization.
+         */
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+}
+
+Dependency findDependency(String projectName, String moduleName) {
+    if (findProject(projectName) != null) {
+        return dependencies.project(path: projectName)
+    }
+
+    return dependencies.create(moduleName)
+}
