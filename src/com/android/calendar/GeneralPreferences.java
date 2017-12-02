@@ -95,6 +95,10 @@ public class GeneralPreferences extends PreferenceFragment implements
     public static final String KEY_DETAILED_VIEW = "preferred_detailedView";
     public static final String KEY_DEFAULT_CALENDAR = "preference_defaultCalendar";
 
+    /** Key to preference for default new event duration (if provider doesn't indicate one) */
+    public static final String KEY_DEFAULT_EVENT_DURATION = "preferences_default_event_duration";
+    public static final String EVENT_DURATION_DEFAULT="60";
+
     // These must be in sync with the array preferences_week_start_day_values
     public static final String WEEK_START_DEFAULT = "-1";
     public static final String WEEK_START_SATURDAY = "7";
@@ -126,6 +130,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     TimeZonePickerUtils mTzPickerUtils;
     ListPreference mWeekStart;
     ListPreference mDefaultReminder;
+    ListPreference mDefaultEventDuration;
 
     private String mTimeZoneId;
 
@@ -181,6 +186,9 @@ public class GeneralPreferences extends PreferenceFragment implements
         mHideDeclined = (CheckBoxPreference) preferenceScreen.findPreference(KEY_HIDE_DECLINED);
         mWeekStart = (ListPreference) preferenceScreen.findPreference(KEY_WEEK_START_DAY);
         mDefaultReminder = (ListPreference) preferenceScreen.findPreference(KEY_DEFAULT_REMINDER);
+        mDefaultEventDuration = (ListPreference) preferenceScreen.findPreference(
+                KEY_DEFAULT_EVENT_DURATION);
+        mDefaultEventDuration.setSummary(mDefaultEventDuration.getEntry());
         mHomeTZ = preferenceScreen.findPreference(KEY_HOME_TZ);
         mWeekStart.setSummary(mWeekStart.getEntry());
         mDefaultReminder.setSummary(mDefaultReminder.getEntry());
@@ -266,6 +274,7 @@ public class GeneralPreferences extends PreferenceFragment implements
         mRingtone.setOnPreferenceChangeListener(listener);
         mHideDeclined.setOnPreferenceChangeListener(listener);
         mVibrate.setOnPreferenceChangeListener(listener);
+        mDefaultEventDuration.setOnPreferenceChangeListener(listener);
     }
 
     @Override
@@ -321,6 +330,9 @@ public class GeneralPreferences extends PreferenceFragment implements
         } else if (preference == mWeekStart) {
             mWeekStart.setValue((String) newValue);
             mWeekStart.setSummary(mWeekStart.getEntry());
+        } else if (preference == mDefaultEventDuration) {
+            mDefaultEventDuration.setValue((String) newValue);
+            mDefaultEventDuration.setSummary(mDefaultEventDuration.getEntry());
         } else if (preference == mDefaultReminder) {
             mDefaultReminder.setValue((String) newValue);
             mDefaultReminder.setSummary(mDefaultReminder.getEntry());
