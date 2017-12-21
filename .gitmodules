@@ -6,7 +6,8 @@
 	url = https://android.googlesource.com/platform/frameworks/opt/chips
 [submodule "external/platforms-frameworks-ex"]
 	path = external/platforms-frameworks-ex
-	url = https://android.googlesource.com/platform/frameworks/ex
+	url = https://github.com/minkustree/android-platform-frameworks-ex.git
+	branch = feature/android-studio-build
 [submodule "external/colorpicker"]
 	path = external/colorpicker
 	url = https://android.googlesource.com/platform/frameworks/opt/colorpicker
